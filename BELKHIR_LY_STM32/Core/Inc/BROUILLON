@@ -1,0 +1,91 @@
+	/**
+  HAL_I2C_Master_Transmit(&hi2c1, bmp280Adresse, &bmp280RegisterId, 1, HAL_MAX_DELAY);
+  HAL_I2C_Master_Receive(&hi2c1, bmp280Adresse, &idValue, 1, HAL_MAX_DELAY);
+  printf("id = 0x%x \r\n" , idValue) ;
+
+	HAL_I2C_Master_Transmit(&hi2c1, bmp280Adresse, config, 2, HAL_MAX_DELAY);
+	
+	
+	
+	//HAL_I2C_Master_Transmit(&hi2c1, bmp280Adresse, &modeNormalT2P16, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(&hi2c1, bmp280Adresse, &configValue, 1, HAL_MAX_DELAY);
+	printf("config = 0x%x \r\n" , configValue) ;
+	etalonnageContenu[2] = 5 ;
+	 */
+	printf("id = 0x%x \r\n" , idValue) ;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	/*for(int i = 0 ; i<24 ; i++){
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		HAL_I2C_Master_Transmit(&hi2c1, bmp280Adresse,&etalonnageRegistre, 1, HAL_MAX_DELAY);
+		HAL_I2C_Master_Receive(&hi2c1, bmp280Adresse,&etalonnageContenu[i], 24, HAL_MAX_DELAY);
+		
+		
+		
+		
+		
+		
+		
+	}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 for(int i = 0 ; i<3 ; i++){
+		HAL_I2C_Master_Transmit(&hi2c1, uint32_t TemperatureConversion(uint32_t temperature){
+		uint32_t t , var1 , var2 ,T ;
+		var1  =((temperature<<3)-(t1<<1))*(t2>>11);
+		var2  =(((temperature<<4)-(t1))*(t2>>11)) ;
+	}Adresse, TempRegister + i, 1,HAL_MAX_DELAY);
+		HAL_I2C_Master_Receive(&hi2c1, bmp280Adresse,&TempValue[i], 1, HAL_MAX_DELAY) ;
+	}
+	Temperature = TempValue[0]<<16 | TempValue[1]<<8 |TempValue[2] ;
+	printf("La temperature est : 0x%x \r\n" , Temperature) ;
+
+	 */
+
+
+	/*uint32_t TemperatureConversion(uint32_t temperature, int32_t t1, int32_t t2, int32_t t3) {
+		int32_t var1, var2, T;
+
+		var1 = ((((temperature >> 3) - ((int32_t)t1 << 1)) * (int32_t)t2) >> 11);
+		int32_t temp_diff = (temperature >> 4) - (int32_t)t1;
+		var2 = (((temp_diff * temp_diff) >> 12) * (int32_t)t3) >> 14;
+
+		T = var1 + var2;
+		T = (T * 5 + 128) >> 8; // Multiplier pour convertir en Celsius (calcul entier)
+		return (uint32_t)T; // Retourner la température en Celsius
+	}*/
