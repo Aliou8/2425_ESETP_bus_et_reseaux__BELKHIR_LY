@@ -21,3 +21,4 @@ def serialRead(ser,size):
 
 
 serialInit(115200,'COM4')
+
