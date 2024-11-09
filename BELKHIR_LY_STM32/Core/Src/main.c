@@ -27,6 +27,8 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "bmp280.h"
+#include "Moteur_can.h"
+#include "STM32_Raspberry.h"
 
 /* USER CODE END Includes */
 
@@ -36,6 +38,8 @@ uint8_t BMP280_REG = 0xD0 ;
 uint8_t idValue  ;
 uint32_t Pression ;
 uint32_t Temperature ;
+CAN_TxHeaderTypeDef pHeader ;
+uint32_t pTxMailbox ;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -69,6 +73,9 @@ int __io_putchar(int chr){
 	return chr;
 }
 uint8_t c[10] = {65 , 66 , 67};
+uint8_t Angle90p[2] = {0x54 , 0x00} ;
+uint8_t Angle90m[2] = {0x54 , 0x01} ;
+
 
 /* USER CODE END 0 */
 
@@ -111,10 +118,14 @@ int main(void)
 	BMP280_Init() ;
 	BMP280_ReadID() ;
 	BMP280_ReadCalibrationData();
-	if(BMP280_RegisterRead(BMP280_REG , &idValue)==0)
-	{
-		printf("la valeur de Config est 0x%X\r\n",idValue);
-	}
+	PI_Init();
+	PI_RUN();
+
+	pHeader.IDE = CAN_ID_STD;
+	pHeader.StdId = AngleID;
+	pHeader.RTR = CAN_RTR_DATA;
+	pHeader.DLC = 2;
+	HAL_CAN_Start(&hcan1) ;
 
   /* USER CODE END 2 */
 
@@ -122,16 +133,22 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
+
 		//Temperature = BMP280_ReadTemperature() ;
 		//Pression = BMP280_ReadPressure();
 		//printf("La temperature est : %lu\r\n", Temperature) ;
 		//printf("La pression est : %lu\r\n", Pression) ;
 		//HAL_Delay(1000);
-		HAL_UART_Receive(&huart3, (uint8_t*)&c,sizeof(c), HAL_MAX_DELAY);
+		//HAL_UART_Receive(&huart3, (uint8_t*)&c,sizeof(c), HAL_MAX_DELAY);
 		//HAL_Delay(1000) ;
-		printf("\r\n La valeur recue est : %s \r\n",c) ;
-		HAL_Delay(1000) ;
-
+		//printf("\r\n La valeur recue est : %s \r\n",c) ;
+		//HAL_Delay(1000) ;
+	if(HAL_OK != HAL_CAN_AddTxMessage(&hcan1, &pHeader,Angle90p, &pTxMailbox)){
+		printf("ok can transmis \r\n");
+	}
+	HAL_Delay(1000) ;
+	HAL_CAN_AddTxMessage(&hcan1, &pHeader,Angle90m, &pTxMailbox);
+	HAL_Delay(1000) ;
 
     /* USER CODE END WHILE */
 

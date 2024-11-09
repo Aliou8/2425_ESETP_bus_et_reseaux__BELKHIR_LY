@@ -60,8 +60,8 @@ all: main-build
 main-build: TP_BELKHIR_LY.elf secondary-outputs
 
 # Tool invocations
-TP_BELKHIR_LY.elf TP_BELKHIR_LY.map: $(OBJS) $(USER_OBJS) D:\TP_TD_ENSEA_3A\TP_capteurs_et_reseaux\BELKHIR_LY\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TP_BELKHIR_LY.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\TP_TD_ENSEA_3A\TP_capteurs_et_reseaux\BELKHIR_LY\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TP_BELKHIR_LY.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+TP_BELKHIR_LY.elf TP_BELKHIR_LY.map: $(OBJS) $(USER_OBJS) D:\TP_TD_ENSEA_3A\TP_capteurs_et_reseaux\BELKHIR_LY_STM32\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "TP_BELKHIR_LY.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\TP_TD_ENSEA_3A\TP_capteurs_et_reseaux\BELKHIR_LY_STM32\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TP_BELKHIR_LY.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

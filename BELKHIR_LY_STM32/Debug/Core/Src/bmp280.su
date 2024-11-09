@@ -1,0 +1,10 @@
+../Core/Src/bmp280.c:18:12:BMP280_RegisterWrite	32	static
+../Core/Src/bmp280.c:26:12:BMP280_RegisterRead	24	static
+../Core/Src/bmp280.c:36:6:BMP280_Init	16	static
+../Core/Src/bmp280.c:45:6:BMP280_ReadID	16	static
+../Core/Src/bmp280.c:58:6:BMP280_ReadCalibrationData	16	static
+../Core/Src/bmp280.c:73:6:ParameterFill	16	static
+../Core/Src/bmp280.c:94:10:BMP280_ReadTemperature	16	static
+../Core/Src/bmp280.c:102:10:BMP280_ConvertTemperature	32	static
+../Core/Src/bmp280.c:112:10:BMP280_ReadPressure	16	static
+../Core/Src/bmp280.c:121:10:BMP280_ConvertPressure	32	static

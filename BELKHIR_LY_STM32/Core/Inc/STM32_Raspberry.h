@@ -1,20 +1,13 @@
-/*
- * STM32_Raspberry.h
- *
- *  Created on: Oct 23, 2024
- *      Author: aliou
- */
+#ifndef __STM32_RASPBERRY__
+#define __STM32_RASPBERRY__
 
-#ifndef INC_STM32_RASPBERRY_H_
-#define INC_STM32_RASPBERRY_H_
+#include <stdio.h>
+#include "bmp280.h"
 
-#include "stm32f4xx_hal.h"
-#include "usart.h"
+#define UART_PI huart2
+#define BUFFER_SIZE 100
 
-#define RxBufferSize 5
+void PI_Init(void) ;
+int PI_RUN(void) ;
 
-
-void getRaspberry() ;
-
-
-#endif /* INC_STM32_RASPBERRY_H_ */
+#endif

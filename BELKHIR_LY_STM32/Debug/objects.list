@@ -1,3 +1,4 @@
+"./Core/Src/Moteur_can.o"
 "./Core/Src/STM32_Raspberry.o"
 "./Core/Src/bmp280.o"
 "./Core/Src/can.o"
