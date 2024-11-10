@@ -40,9 +40,9 @@ Les fonctions suivantes permettent de calculer la température et la pression co
 
 ##### Fonction pour la Température
 
-` uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) {
+` 
+uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) {
     int32_t var1, var2, T;
-
     var1 = ((rawTemp >> 3) - (param->dig_T1 << 1)) * param->dig_T2 >> 11;
     var2 = ((((rawTemp >> 4) - param->dig_T1) * ((rawTemp >> 4) - param->dig_T1)) >> 12) * param->dig_T3 >> 14;
     t_fine = var1 + var2;
