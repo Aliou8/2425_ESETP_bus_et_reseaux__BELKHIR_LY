@@ -24,7 +24,7 @@ Pour placer le BMP280 en mode normal :
 - **Valeur** : `0b11`
 
 #### Registres contenant l'étalonnage
-Les registres d’étalonnage sont situés de `0x88` à `0xA1` et de `0xE1` à `0xE7`. Ces registres contiennent les coefficients nécessaires pour compenser les mesures de température et de pression.
+Les registres d’étalonnage sont situés de `0x88` à `0xA1`. Ces registres contiennent les coefficients nécessaires pour compenser les mesures de température et de pression.
 
 #### Registres de Température
 - **Registres** : `0xFA`, `0xFB`, `0xFC`
@@ -39,4 +39,16 @@ Les registres d’étalonnage sont situés de `0x88` à `0xA1` et de `0xE1` à `
 Les fonctions suivantes permettent de calculer la température et la pression compensées en format entier 32 bits :
 
 ##### Fonction pour la Température
+'''c
+uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) {
+    int32_t var1, var2, T;
+
+    var1 = ((rawTemp >> 3) - (param->dig_T1 << 1)) * param->dig_T2 >> 11;
+    var2 = ((((rawTemp >> 4) - param->dig_T1) * ((rawTemp >> 4) - param->dig_T1)) >> 12) * param->dig_T3 >> 14;
+    t_fine = var1 + var2;
+    T = (t_fine * 5 + 128) >> 8;
+    return T;
+}
+
+
 
