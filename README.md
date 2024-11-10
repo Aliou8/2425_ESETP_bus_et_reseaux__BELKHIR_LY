@@ -51,6 +51,37 @@ uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * 
     T = (t_fine * 5 + 128) >> 8;
     return T;
 }
+```
+
+##### Fonction pour la Pression
+```c
+uint32_t BMP280_ConvertPressure(uint32_t rawPressure, BMP280_CompenParameter_t * param) 
+{
+    int32_t var1, var2, P;
+    
+    var1 = (t_fine >> 1) - 64000;
+    var2 = ((var1 >> 2) * (var1 >> 2) >> 11) * param->dig_P6;
+    var2 = var2 + ((var1 * param->dig_P5) << 1);
+    var2 = (var2 >> 2) + (param->dig_P4 << 16);
+    var1 = (((param->dig_P3 * (((var1 >> 2) * (var1 >> 2)) >> 13)) >> 3) + ((param->dig_P2 * var1) >> 1)) >> 18;
+    var1 = ((32768 + var1) * param->dig_P1) >> 25;
+
+    if (var1 == 0) {
+        return 0;  // Pour éviter la division par zéro
+    }
+
+    P = ((1048576 - rawPressure) - (var2 >> 12)) * 3125;
+    if (P < (int32_t)0x80000000) {
+        P = (P << 1) / var1;
+    } else {
+        P = (P / var1) * 2;
+    }
+
+    return P;
+}
+
+```
+
 
 
 
