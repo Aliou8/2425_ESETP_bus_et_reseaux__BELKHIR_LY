@@ -8,29 +8,29 @@
 #define BMP280_CALIB_DAATA_LEN 24
 
 typedef struct
+
 {
-    uint8_t dig_T1;
-    int8_t dig_T2;
-    int8_t dig_T3;
-    uint8_t dig_P1;
-    int8_t dig_P2;
-    int8_t dig_P3;
-    int8_t dig_P4;
-    int8_t dig_P5;
-    int8_t dig_P6;
-    int8_t dig_P7;
-    int8_t dig_P8;
-    int8_t dig_P9;
+    uint32_t dig_T1;
+    int32_t dig_T2;
+    int32_t dig_T3;
+    uint32_t dig_P1;
+    int32_t dig_P2;
+    int32_t dig_P3;
+    int32_t dig_P4;
+    int32_t dig_P5;
+    int32_t dig_P6;
+    int32_t dig_P7;
+    int32_t dig_P8;
+    int32_t dig_P9;
 } BMP280_CompenParameter_t;
 
 void BMP280_Init(void);
 void BMP280_ReadID(void);
-void BMP280_ReadCalibrationData(void);
-uint32_t BMP280_ReadTemperature(void);
-uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) ;
-uint32_t BMP280_ReadPressure(void);
-uint32_t BMP280_ConvertPressure(uint32_t rawPressure, BMP280_CompenParameter_t * param);
-void ParameterFill(BMP280_CompenParameter_t * param) ;
+void BMP280_ReadCalibrationData(BMP280_CompenParameter_t * param);
+int32_t BMP280_ReadTemperature(void);
+int32_t BMP280_ConvertTemperature(int32_t rawTemp, BMP280_CompenParameter_t * param) ;
+int32_t BMP280_ReadPressure(void);
+int32_t BMP280_ConvertPressure(int32_t rawPressure, BMP280_CompenParameter_t * param);
 
 
 #endif // BMP280_H

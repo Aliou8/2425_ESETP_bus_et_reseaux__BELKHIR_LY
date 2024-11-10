@@ -2,4 +2,4 @@
 ../Core/Src/STM32_Raspberry.c:17:12:uart_write	1
 ../Core/Src/STM32_Raspberry.c:23:6:PI_Init	1
 ../Core/Src/STM32_Raspberry.c:29:13:PI_GetCommand	3
-../Core/Src/STM32_Raspberry.c:50:5:PI_RUN	6
+../Core/Src/STM32_Raspberry.c:48:5:PI_RUN	6

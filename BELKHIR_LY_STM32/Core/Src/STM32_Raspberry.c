@@ -27,8 +27,6 @@ void PI_Init(void) {
 
 // Fonction pour traiter les commandes
 static void PI_GetCommand(char *buffer) {
-	BMP280_ReadCalibrationData() ;
-	ParameterFill(&paramPI);
 
     uint32_t temperature =BMP280_ConvertTemperature(BMP280_ReadTemperature(), &paramPI);
     uint32_t pression = BMP280_ReadPressure();
