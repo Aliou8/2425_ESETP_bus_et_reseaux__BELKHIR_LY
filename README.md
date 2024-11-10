@@ -81,6 +81,10 @@ uint32_t BMP280_ConvertPressure(uint32_t rawPressure, BMP280_CompenParameter_t *
 }
 
 ```
+## TP2 - Interfaçage STM32 - Raspberry
+Le Raspberry Pi obtient son adresse IP via l'un des deux mécanismes suivants : 
+Adresse IP statique : 
+Si le fichier de configuration réseau du Raspberry Pi a été modifié (généralement dans /etc/dhcpcd.conf ou /etc/network/interfaces selon la version du système), il peut avoir une adresse IP statique. Cela signifie que l'adresse IP est définie manuellement et reste fixe, même après redémarrage ou changement de réseau ( On va obtenir laddres ip de raspberry depuis ladresse de ENSEA )
 
 
 
