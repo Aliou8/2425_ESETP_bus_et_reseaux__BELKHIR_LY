@@ -20,8 +20,8 @@ Le BMP280 peut utiliser deux adresses I²C différentes :
 
 #### Mode Normal du BMP280
 Pour placer le BMP280 en mode normal :
-- **Registre** : `0xF4`
-- **Valeur** : `0x57` pour `0b010` ,`0b011` et `0b11`
+- **Registre** : `0xF4` pour les bit [1:0]
+- **Valeur** : `0b11`
 
 #### Registres contenant l'étalonnage
 Les registres d’étalonnage sont situés de `0x88` à `0xA1` et de `0xE1` à `0xE7`. Ces registres contiennent les coefficients nécessaires pour compenser les mesures de température et de pression.
