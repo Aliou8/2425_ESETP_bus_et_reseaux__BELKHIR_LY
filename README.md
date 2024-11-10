@@ -39,8 +39,8 @@ Les registres d’étalonnage sont situés de `0x88` à `0xA1`. Ces registres co
 Les fonctions suivantes permettent de calculer la température et la pression compensées en format entier 32 bits :
 
 ##### Fonction pour la Température
-'
-uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) {
+
+` uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) {
     int32_t var1, var2, T;
 
     var1 = ((rawTemp >> 3) - (param->dig_T1 << 1)) * param->dig_T2 >> 11;
@@ -48,7 +48,7 @@ uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * 
     t_fine = var1 + var2;
     T = (t_fine * 5 + 128) >> 8;
     return T;
-}'
+}`
 
 
 
