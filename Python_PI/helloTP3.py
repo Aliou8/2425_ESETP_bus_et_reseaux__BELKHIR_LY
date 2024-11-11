@@ -1,8 +1,14 @@
 import json
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 welcome = "Welcome to 3ESE API!"
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!\n'
+
 
 @app.route('/api/welcome/')
 def api_welcome():
@@ -18,7 +24,7 @@ def api_welcome_index(index):
     #return welcome[index]
 
     # Option 2 : Utiliser json.dumps() et définir Content-Type manuellement
-    # return json.dumps({"index": index, "val": welcome[index]}), {"Content-Type": "application/json"}
+    return json.dumps({"index": index, "val": welcome[index]}), {"Content-Type": "application/json"}
 
     # Option 3 : Utiliser jsonify() de Flask pour formater automatiquement
     return jsonify({"index": index, "val": welcome[index]})

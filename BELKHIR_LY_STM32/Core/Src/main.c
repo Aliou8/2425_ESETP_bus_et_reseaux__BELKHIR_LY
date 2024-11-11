@@ -34,13 +34,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-int8_t BMP280_REG = 0xD0 ;
-int8_t idValue  ;
-int32_t Pression ;
-int32_t Temperature ;
-CAN_TxHeaderTypeDef pHeader ;
-uint32_t pTxMailbox ;
-BMP280_CompenParameter_t  param ;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -58,25 +51,29 @@ BMP280_CompenParameter_t  param ;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
+int32_t temperature, pressure;
+CAN_TxHeaderTypeDef pHeader;
+uint32_t pTxMailbox;
+uint8_t Angle90p[2] = {0x54 , 0x00} ;
+uint8_t Angle90m[2] = {0x54 , 0x01} ;
 
 /* Private function prototypes -----------------------------------------------*/
+
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void Measure_Display_Temp_Pressure(void);
+void CAN_SendMessage(uint16_t id, uint8_t *data, uint8_t length) ;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int __io_putchar(int chr){
+int __io_putchar(int chr)
+{
 
 	//HAL_UART_Transmit(&huart3, (uint8_t*)&chr,1, HAL_MAX_DELAY);
 	HAL_UART_Transmit(&huart2, (uint8_t*)&chr,1, HAL_MAX_DELAY);
 	return chr;
 }
-uint8_t c[10] = {65 , 66 , 67};
-uint8_t Angle90p[2] = {0x54 , 0x00} ;
-uint8_t Angle90m[2] = {0x54 , 0x01} ;
-
 
 /* USER CODE END 0 */
 
@@ -118,24 +115,14 @@ int main(void)
 	printf("=============TP BUS & RESEAUX ===========\r\n") ;
 	BMP280_Init() ;
 	//BMP280_ReadID() ;
-	BMP280_ReadCalibrationData(&param);
+	BMP280_Init();
+	BMP280_ReadCalibrationData();  // Lecture des paramètres de calibration
 	PI_Init();
 	PI_RUN();
 
 	pHeader.IDE = CAN_ID_STD;
-	pHeader.StdId = AngleID;
 	pHeader.RTR = CAN_RTR_DATA;
-	pHeader.DLC = 2;
-	HAL_CAN_Start(&hcan1) ;
-
-	Temperature = BMP280_ReadTemperature() ;
-	Pression = BMP280_ReadPressure();
-	printf("La temperature non compensée est : %d\r\n", Temperature) ;
-	printf("La pression non compensée est : %lu\r\n", Pression) ;
-	Temperature =BMP280_ConvertTemperature(Temperature, &param);
-	Pression = BMP280_ConvertPressure(Pression, &param);
-	printf("La temperature  compensée est : %d\r\n", Temperature) ;
-	printf("La pression compensée est : %lu\r\n", Pression) ;
+	HAL_CAN_Start(&hcan1);
 
 	/* USER CODE END 2 */
 
@@ -143,13 +130,12 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		//if(HAL_OK != HAL_CAN_AddTxMessage(&hcan1, &pHeader,Angle90p, &pTxMailbox)){
-		//	printf("ok can transmis \r\n");
-		//}
-		//HAL_Delay(1000) ;
-		//HAL_CAN_AddTxMessage(&hcan1, &pHeader,Angle90m, &pTxMailbox);
-		//HAL_Delay(1000) ;
-
+		// Mesurer et afficher les valeurs de température et de pression
+		 Measure_Display_Temp_Pressure();
+		 CAN_SendMessage(AngleID, Angle90p, 2) ;
+		 HAL_Delay(1000);
+		 CAN_SendMessage(AngleID, Angle90m, 2) ;
+		 HAL_Delay(1000);
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
@@ -211,6 +197,34 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void Measure_Display_Temp_Pressure(void) {
+    temperature = BMP280_ReadTemperature();
+    pressure = BMP280_ReadPressure();
+
+    if (temperature && pressure) {
+        printf("Température non compensée : %ld\r\n", temperature);
+        printf("Pression non compensée : %ld\r\n", pressure);
+
+        temperature = BMP280_ConvertTemperature(temperature);
+        pressure = BMP280_ConvertPressure(pressure);
+
+        printf("Température compensée : %ld\r\n", temperature);
+        printf("Pression compensée : %ld\r\n", pressure);
+    } else {
+        printf("Erreur de lecture des données de température ou de pression\r\n");
+    }
+}
+
+void CAN_SendMessage(uint16_t id, uint8_t *data, uint8_t length) {
+    pHeader.StdId = id;
+    pHeader.DLC = length;
+
+    if (HAL_CAN_AddTxMessage(&hcan1, &pHeader, data, &pTxMailbox) != HAL_OK) {
+        printf("Erreur d'envoi CAN pour l'ID: 0x%X\r\n", id);
+    } else {
+        printf("Message CAN envoyé, ID: 0x%X, Data: 0x%X 0x%X\r\n", id, data[0], data[1]);
+    }
+}
 
 /* USER CODE END 4 */
 

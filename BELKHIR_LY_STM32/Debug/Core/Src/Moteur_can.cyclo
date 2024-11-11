@@ -1,0 +1,8 @@
+../Core/Src/Moteur_can.c:15:6:setK	1
+../Core/Src/Moteur_can.c:19:9:getK	1
+../Core/Src/Moteur_can.c:24:9:getAngle	1
+../Core/Src/Moteur_can.c:30:13:CAN_SendMessage	2
+../Core/Src/Moteur_can.c:39:6:manualMode	1
+../Core/Src/Moteur_can.c:52:6:setMotorAngle	2
+../Core/Src/Moteur_can.c:74:6:setPositionTo0	1
+../Core/Src/Moteur_can.c:86:6:moteurRun	1
