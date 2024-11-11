@@ -29,20 +29,22 @@ static void PI_GetCommand(char *buffer)
 {
     // Vérifiez la commande et construisez la réponse sans afficher la commande
     if (strcmp(buffer, "GET_T") == 0) {
-       // int32_t tempNc = 51000 ; //BMP280_ReadTemperature() ;
-        int32_t temp = 1250 ; //BMP280_ConvertTemperature(tempNc) ;
+       int32_t tempNc = BMP280_ReadTemperature() ;
+        int32_t temp = BMP280_ConvertTemperature(tempNc) ;
         int size = snprintf(printfBuffer, BUFFER_SIZE, "T=+%ld%ld.%ld%ld_C\r\n",(temp/1000)%10,(temp/100)%10,(temp/10)%10,temp%10);
         uart_write(printfBuffer, size);
     } else if (strcmp(buffer, "GET_P") == 0) {
-       // int32_t PresNc =5800000 ; // BMP280_ReadPressure() ;
-        int32_t Pres = 58000 ; //BMP280_ConvertPressure(PresNc) ;
+       int32_t PresNc =BMP280_ReadPressure() ;
+        int32_t Pres = BMP280_ConvertPressure(PresNc) ;
         int size = snprintf(printfBuffer, BUFFER_SIZE, "P=%ldPa\r\n",Pres);
         uart_write(printfBuffer, size);
     }
-    else if(strcmp(buffer, "SET_K=1234") == 0){
-        //setK(100) ;
-        int size = snprintf(printfBuffer, BUFFER_SIZE, "SET_K=OK \r\n");
-        uart_write(printfBuffer, size);
+    else if (strncmp(buffer, "SET_K=", 6) == 0) {  // Vérifie si le buffer commence par "SET_K="
+        int32_t value;
+        if (sscanf(buffer + 6, "%ld", &value) == 1) {  // Extrait l'entier après "SET_K="
+            setK(value);
+            int size = snprintf(printfBuffer, BUFFER_SIZE, "SET_K=OK =%ld\r\n",value);
+            uart_write(printfBuffer, size) ;
     }
     else if(strcmp(buffer, "GET_K") == 0){
         int16_t K= 1234 ; // getK() ;
@@ -51,7 +53,7 @@ static void PI_GetCommand(char *buffer)
     }
     else if(strcmp(buffer, "GET_A") == 0){
         int16_t A= 90 ;//getAngle() ;
-        int size = snprintf(printfBuffer, BUFFER_SIZE, "A=%d%d%d.0000\r\n",(A/100)%10,(A/10)%10,(A)%10,A%10);
+        int size = snprintf(printfBuffer, BUFFER_SIZE, "A=%d%d%d.%d000\r\n",(A/100)%10,(A/10)%10,(A)%10,(A*10)%10);
         uart_write(printfBuffer, size);
     }
     else {
@@ -59,8 +61,10 @@ static void PI_GetCommand(char *buffer)
         uart_write(printfBuffer, size);
     }
 }
+}
 
 // Fonction principale pour gérer les commandes envoyées via UART
+
 int PI_RUN(void)
 {
     static char cmd_buffer[BUFFER_SIZE];

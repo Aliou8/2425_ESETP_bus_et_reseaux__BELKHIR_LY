@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/TP_TD_ENSEA_3A/TP_capteurs_et_reseaux/BELKHIR_LY_STM32/Core/Src",
-      "program": "d:/TP_TD_ENSEA_3A/TP_capteurs_et_reseaux/BELKHIR_LY_STM32/Core/Src/build/Debug/outDebug",
+      "cwd": "d:/TP_TD_ENSEA_3A/TP_capteurs_et_reseaux/BELKHIR_LY_STM32",
+      "program": "d:/TP_TD_ENSEA_3A/TP_capteurs_et_reseaux/BELKHIR_LY_STM32/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

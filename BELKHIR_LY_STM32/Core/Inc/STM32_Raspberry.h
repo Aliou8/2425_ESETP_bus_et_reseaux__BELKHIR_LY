@@ -2,7 +2,8 @@
 #define __STM32_RASPBERRY__
 
 #include <stdio.h>
-//#include "bmp280.h"
+#include "bmp280.h"
+#include "Moteur_can.h"
 
 #define UART_PI huart3
 #define BUFFER_SIZE 100
