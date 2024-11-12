@@ -102,7 +102,9 @@ La Raspberry Pi obtient son adresse IP grâce au DHCP. Lorsqu'elle est connecté
 Avec la commande `minicom -D /dev/ttyAMA0` on revoie la valeur saisie dans le terminal minicom la liaison UART fonctionne
 
 #### Communication avec la STM32
-La gestion de la communication se fait dans le fichier `STM32_Raspberry` avec une fonction ```PI_RUN()``` qui se comporte comme un shell et assure la reception des commande .Une fois la commande términée elle est comparée puis la fonction ```PI_GetCommande``` renvoie la reponse .
+La communication entre le STM32 et la Raspberry Pi est gérée dans le fichier``` STM32_Raspberry.c```. Dans ce fichier, la fonction principale, PI_RUN(), fonctionne comme un shell. Elle assure la réception et le traitement des commandes reçues via le port série (UART).
+
+La fonction ```PI_GetCommand() ``` traite les commandes reçues via UART, en vérifiant la commande, en exécutant les actions associées, puis en envoyant la réponse appropriée.
 ``` C
 
 // Fonction pour traiter les commandes reçues via UART
@@ -144,17 +146,21 @@ static void PI_GetCommand(char *buffer)
 }
 }
 ```
+
+Les commandes disponibles pour la communication entre le STM32 et la Raspberry Pi sont :
+
+```GET_T``` : Renvoie la température mesurée par le capteur BMP280, formatée en degrés Celsius.
+```GET_P``` : Renvoie la pression mesurée par le capteur BMP280 en Pascals.
+```SET_K=<valeur> ```: Met à jour une constante K avec la valeur fournie.
+```GET_K``` : Renvoie la valeur de la constante K actuelle.
+```GET_A ```: Renvoie l’angle mesuré.
+
 ## TP3 - Interface REST
-Pour cette partie l'ensemble du code se trouve dans le fichier ```Python_PI``` avec :
-```helloTP3.py``` qui affiche une page ```hello, world``` en format html : 
+Dans le fichier ```Python_PI/helloTP3.py```, un serveur web simple affiche une page avec le message ```"hello, world" ```en HTML. Pour spécifier la page d'accès, la fonction @app.route est utilisée, et le fragment <int:index> permet de récupérer une variable passée dans l'URL.
 ![Texte alternatif](/images/rest1_html.png)
- , images\curl1.png  cote a cote """ 
+![Texte alternatif](/images/curl1.png)
 
-Le rôle du décodeur @app.route et de pouvoir spécifier la page à laquelle on
-veut accéder. Le rôle du fragment <int:index> et de pouvoir récupérer une variable
-passé dans l’URL.
-
-pour avoir le format json on utilise :
+Pour renvoyer des réponses au format JSON, deux méthodes sont utilisées :
 ```python
 return json.dumps({"index":index,"val":welcome[index]}),{"content-Type" : "application/json"}
 ```
@@ -162,18 +168,20 @@ et
 ```python
 return jsonify({"index": index, "val": welcome[index]})
 ```
- """ insert images\rest2_JSON.png """ 
- lorsque l phage demander n'existe pas on renvoie vers la page eurreur 404 dans le template 
-i """ insert images\E404.png """ 
- 
-### API CRUD ``` Python_PI\methodesTP3.py ```
-On sepere les fonction qui demande index et les autres qui n'en ont pas 
-""" insert images\POST.png """ 
-""" insert images\POSTx.png """ 
-""" insert images\GET.png """ 
-""" insert images\GETx.png """ 
+![Texte alternatif](/images/rest2_JSON.png) 
+En cas de requête vers une page inexistante, une erreur 404 est affichée via un template.
 
-## TP5-Bus CAN
-La communication est geée dans le fichierr ``` Moteur_Can``` 
+![Texte alternatif](/images/E404.png)
+ 
+### API CRUD 
+Le fichier Python_PI/methodesTP3.py contient les différentes méthodes CRUD pour manipuler les données. Ces fonctions sont organisées selon qu'elles nécessitent un index ou non.
+
+![Texte alternatif](/images/POST.png)
+![Texte alternatif](/images/POSTx.png)
+![Texte alternatif](/images/GET.png)
+![Texte alternatif](/images/GETx.png)
+
+## TP4-Bus CAN
+La communication sur le bus CAN est gérée dans le fichier ```Moteur_Can```. Ce programme permet d'envoyer des données evia le protocole CAN pour commander un moteur pas a pas 
 
 
