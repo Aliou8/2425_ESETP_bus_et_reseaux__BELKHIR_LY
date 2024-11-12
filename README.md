@@ -146,7 +146,8 @@ static void PI_GetCommand(char *buffer)
 ```
 ## TP3 - Interface REST
 Pour cette partie l'ensemble du code se trouve dans le fichier ```Python_PI``` avec :
-```helloTP3.py``` qui affiche une page ```hello, world``` en format html : ![Texte alternatif]( images\rest1_html.png)
+```helloTP3.py``` qui affiche une page ```hello, world``` en format html : 
+![Texte alternatif](images\rest1_html.png)
  , images\curl1.png  cote a cote """ 
 
 Le rôle du décodeur @app.route et de pouvoir spécifier la page à laquelle on
