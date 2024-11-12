@@ -89,7 +89,7 @@ La Raspberry Pi obtient son adresse IP grâce au DHCP. Lorsqu'elle est connecté
 Avec la commande `minicom -D /dev/ttyAMA0` on revoie la valeur saisie dans le terminal minicom la liaison UART fonctionne
 
 #### Communication avec la STM32
-La gestion de la communication se fait dans le fichier `STM32_Raspberry` avec un fonction ```PI_RUN()``` qui se comporte comme un shell et assure la reception des commande .Une fois la commande términée elle est comparée puis la fonction ```PI_GetCommande``` renvoie la reponse .
+La gestion de la communication se fait dans le fichier `STM32_Raspberry` avec une fonction ```PI_RUN()``` qui se comporte comme un shell et assure la reception des commande .Une fois la commande términée elle est comparée puis la fonction ```PI_GetCommande``` renvoie la reponse .
 ``` C
 
 // Fonction pour traiter les commandes reçues via UART
@@ -131,7 +131,19 @@ static void PI_GetCommand(char *buffer)
 }
 }
 ```
+## TP3 - Interface REST
+Pour cette partie l'ensemble du code se trouve dans le fichier ```Python_PI``` avec :
+```helloTP3.py``` qui affiche une page ```hello, world``` en format html : """insert images\rest1_html.png , images\curl1.png  cote a cote """ 
 
+Le rôle du décodeur @app.route et de pouvoir spécifier la page à laquelle on
+veut accéder. Le rôle du fragment <int:index> et de pouvoir récupérer une variable
+passé dans l’URL.
 
-
-
+pour avoir le format json on utilise :
+```python
+return json.dumps({"index":index,"val":welcome[index]}),{"content-Type" : "application/json"}
+```
+et 
+```python
+return jsonify({"index": index, "val": welcome[index]})
+```
