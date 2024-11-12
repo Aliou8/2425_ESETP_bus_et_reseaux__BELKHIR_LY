@@ -84,6 +84,54 @@ uint32_t BMP280_ConvertPressure(uint32_t rawPressure, BMP280_CompenParameter_t *
 ## TP2 - Interfaçage STM32 - Raspberry
 La Raspberry Pi obtient son adresse IP grâce au DHCP. Lorsqu'elle est connectée à un réseau via Wi-Fi, elle envoie une demande d'adresse IP au routeur. Le routeur, qui agit en tant que serveur DHCP, lui attribue automatiquement une adresse IP privée unique pour le réseau local. 
 
+### Port Série
+#### Loppback
+Avec la commande `minicom -D /dev/ttyAMA0` on revoie la valeur saisie dans le terminal minicom la liaison UART fonctionne
+
+#### Communication avec la STM32
+La gestion de la communication se fait dans le fichier `STM32_Raspberry` avec un fonction ```PI_RUN()``` qui se comporte comme un shell et assure la reception des commande .Une fois la commande términée elle est comparée puis la fonction ```PI_GetCommande``` renvoie la reponse .
+``` C
+
+// Fonction pour traiter les commandes reçues via UART
+static void PI_GetCommand(char *buffer)
+{
+    // Vérifiez la commande et construisez la réponse sans afficher la commande
+    if (strcmp(buffer, "GET_T") == 0) {
+       int32_t tempNc = BMP280_ReadTemperature() ;
+        int32_t temp = BMP280_ConvertTemperature(tempNc) ;
+        int size = snprintf(printfBuffer, BUFFER_SIZE, "T=+%ld%ld.%ld%ld_C\r\n",(temp/1000)%10,(temp/100)%10,(temp/10)%10,temp%10);
+        uart_write(printfBuffer, size);
+    } else if (strcmp(buffer, "GET_P") == 0) {
+       int32_t PresNc =BMP280_ReadPressure() ;
+        int32_t Pres = BMP280_ConvertPressure(PresNc) ;
+        int size = snprintf(printfBuffer, BUFFER_SIZE, "P=%ldPa\r\n",Pres);
+        uart_write(printfBuffer, size);
+    }
+    else if (strncmp(buffer, "SET_K=", 6) == 0) {  // Vérifie si le buffer commence par "SET_K="
+        int32_t value;
+        if (sscanf(buffer + 6, "%ld", &value) == 1) {  // Extrait l'entier après "SET_K="
+            setK(value);
+            int size = snprintf(printfBuffer, BUFFER_SIZE, "SET_K=OK =%ld\r\n",value);
+            uart_write(printfBuffer, size) ;
+    }
+    else if(strcmp(buffer, "GET_K") == 0){
+        int16_t K= 1234 ; // getK() ;
+        int size = snprintf(printfBuffer, BUFFER_SIZE, "K=%d%d.%d%d000\r\n",(K/1000)%10,(K/100)%10,(K/10)%10,K%10);
+        uart_write(printfBuffer, size);
+    }
+    else if(strcmp(buffer, "GET_A") == 0){
+        int16_t A= 90 ;//getAngle() ;
+        int size = snprintf(printfBuffer, BUFFER_SIZE, "A=%d%d%d.%d000\r\n",(A/100)%10,(A/10)%10,(A)%10,(A*10)%10);
+        uart_write(printfBuffer, size);
+    }
+    else {
+        int size = snprintf(printfBuffer, BUFFER_SIZE, "\r\nCommande inconnue\r\n");
+        uart_write(printfBuffer, size);
+    }
+}
+}
+```
+
 
 
 
