@@ -1,49 +1,61 @@
 # TP Bus et Réseaux
 
-> Aliou LY et Bayazid BELKHIR
+> Réalisé par : Aliou LY et Bayazid BELKHIR
+
+---
+
+## Table des Matières
+- [TP 1 - Bus I2C](#tp-1---bus-i2c)
+  - [Objectif](#objectif)
+  - [Interfaçage du BMP280](#interfaçage-du-bmp280)
+  - [Calcul des Valeurs Compensées](#calcul-des-valeurs-compensées)
+- [TP 2 - Interfaçage STM32 - Raspberry](#tp-2---interfaçage-stm32---raspberry)
+  - [Configuration du Port Série](#configuration-du-port-série)
+  - [Communication STM32 - Raspberry](#communication-stm32---raspberry)
+- [TP 3 - Interface REST](#tp-3---interface-rest)
+  - [Serveur Web et Réponses JSON](#serveur-web-et-réponses-json)
+  - [API CRUD](#api-crud)
+- [TP 4 - Bus CAN](#tp-4---bus-can)
+
+---
 
 ## TP 1 - Bus I2C
 
 ### Objectif
-Interfacer un microcontrôleur STM32 avec des capteurs connectés via le bus I2C.
+L'objectif est d'interfacer un microcontrôleur STM32 avec des capteurs via le bus I2C. Le capteur utilisé est le **BMP280**, qui permet de mesurer la température et la pression.
 
-### 1. Capteur de Température et Pression BMP280
+### Interfaçage du BMP280
 
-#### Adresses I²C possibles pour le BMP280
-Le BMP280 peut utiliser deux adresses I²C différentes :
-- **0x76** : lorsque la broche SDO est connectée à la masse (GND).
-- **0x77** : lorsque la broche SDO est connectée à la tension d'alimentation (VDDIO).
+#### Adresses I²C possibles
+Le capteur BMP280 peut utiliser deux adresses I²C en fonction de la connexion de la broche SDO :
+- **0x76** : lorsque la broche SDO est connectée à GND.
+- **0x77** : lorsque la broche SDO est connectée à VDDIO.
 
 #### Registre et Valeur d'Identification
+Pour identifier le BMP280, on utilise le registre suivant :
 - **Registre** : `0xD0`
-- **Valeur** : `0x58`
+- **Valeur attendue** : `0x58`
 
 #### Mode Normal du BMP280
-Pour placer le BMP280 en mode normal :
-- **Registre** : `0xF4` pour les bits [1:0]
+Pour placer le capteur en mode de fonctionnement normal :
+- **Registre** : `0xF4` (bits [1:0])
 - **Valeur** : `0b11`
 
-#### Registres contenant l'étalonnage
-Les registres d’étalonnage sont situés de `0x88` à `0xA1`. Ces registres contiennent les coefficients nécessaires pour compenser les mesures de température et de pression.
+#### Registres d'Étalonnage
+Les coefficients d'étalonnage nécessaires à la compensation des mesures sont stockés dans les registres de `0x88` à `0xA1`.
 
-#### Registres de Température
-- **Registres** : `0xFA`, `0xFB`, `0xFC`
-- **Format** : 20 bits (les bits [7:0] de `0xFA`, `0xFB`, et les bits [7:4] de `0xFC` composent la valeur brute de la température)
+#### Registres de Température et Pression
+Les mesures brutes de température et de pression sont lues depuis les registres suivants :
+- **Température** : `0xFA`, `0xFB`, `0xFC` (20 bits)
+- **Pression** : `0xF7`, `0xF8`, `0xF9` (20 bits)
 
-#### Registres de Pression
-- **Registres** : `0xF7`, `0xF8`, `0xF9`
-- **Format** : 20 bits (les bits [7:0] de `0xF7`, `0xF8`, et les bits [7:4] de `0xF9` composent la valeur brute de la pression)
+### Calcul des Valeurs Compensées
+Les valeurs brutes lues du BMP280 sont compensées grâce aux coefficients d'étalonnage. Les fonctions en C suivantes permettent de convertir ces valeurs en températures et pressions compensées :
 
-#### Calcul de la Température et de la Pression Compensées
-
-Les fonctions suivantes permettent de calculer la température et la pression compensées en format entier 32 bits :
-
-##### Fonction pour la Température
+##### Fonction de Température
 
 ```c
-
-uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param)
-{
+uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * param) {
     int32_t var1, var2, T;
     var1 = ((rawTemp >> 3) - (param->dig_T1 << 1)) * param->dig_T2 >> 11;
     var2 = ((((rawTemp >> 4) - param->dig_T1) * ((rawTemp >> 4) - param->dig_T1)) >> 12) * param->dig_T3 >> 14;
@@ -51,6 +63,7 @@ uint32_t BMP280_ConvertTemperature(uint32_t rawTemp, BMP280_CompenParameter_t * 
     T = (t_fine * 5 + 128) >> 8;
     return T;
 }
+
 ```
 
 ##### Fonction pour la Pression
@@ -133,7 +146,8 @@ static void PI_GetCommand(char *buffer)
 ```
 ## TP3 - Interface REST
 Pour cette partie l'ensemble du code se trouve dans le fichier ```Python_PI``` avec :
-```helloTP3.py``` qui affiche une page ```hello, world``` en format html : """insert images\rest1_html.png , images\curl1.png  cote a cote """ 
+```helloTP3.py``` qui affiche une page ```hello, world``` en format html : ![Texte alternatif]( images\rest1_html.png)
+ , images\curl1.png  cote a cote """ 
 
 Le rôle du décodeur @app.route et de pouvoir spécifier la page à laquelle on
 veut accéder. Le rôle du fragment <int:index> et de pouvoir récupérer une variable
@@ -147,3 +161,18 @@ et
 ```python
 return jsonify({"index": index, "val": welcome[index]})
 ```
+ """ insert images\rest2_JSON.png """ 
+ lorsque l phage demander n'existe pas on renvoie vers la page eurreur 404 dans le template 
+i """ insert images\E404.png """ 
+ 
+### API CRUD ``` Python_PI\methodesTP3.py ```
+On sepere les fonction qui demande index et les autres qui n'en ont pas 
+""" insert images\POST.png """ 
+""" insert images\POSTx.png """ 
+""" insert images\GET.png """ 
+""" insert images\GETx.png """ 
+
+## TP5-Bus CAN
+La communication est geée dans le fichierr ``` Moteur_Can``` 
+
+
