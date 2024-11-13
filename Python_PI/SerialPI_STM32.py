@@ -9,14 +9,13 @@ tab_T = [] #tableau des températures
 tab_P = [] #tableau des pressions
 
 
-ser = serial.Serial("/dev/ttyAMA0",115200,timeout=1)
-ser.reset_output_buffer()
-ser.reset_input_buffer()
+ser = serial.Serial("/dev/serial0",115200,timeout=1)
+
 #temperature
 @app.route('/api/temp/', methods=['GET', 'POST'])
 def api_temp():
-        ser.reset_output_buffer()
-        ser.reset_input_buffer()
+        
+        
         resp = {
             "method":   request.method,
             "url" :  request.url,
@@ -55,8 +54,8 @@ def api_temp_index(index=None):
 #pression
 @app.route('/api/pres/', methods=['GET', 'POST'])
 def api_pres():
-        ser.reset_output_buffer()
-        ser.reset_input_buffer()
+        
+        
         resp = {
             "method":   request.method,
             "url" :  request.url,
@@ -95,8 +94,8 @@ def api_pres_index(index=None):
 #scale
 @app.route('/api/scale/', methods=['GET'])
 def api_scale():
-        ser.reset_output_buffer()
-        ser.reset_input_buffer()
+        
+        
 
         resp = {
             "method":   request.method,
@@ -119,7 +118,7 @@ def api_scale_index(index=None):
             "headers": dict(request.headers),
         }
         if request.method == 'POST' :
-                ser.write(b'SET_K')     #envoie à la stm32 que l'on veut faire un SET_K
+                ser.write(b'SET_K= '+str(index))     #envoie à la stm32 que l'on veut faire un SET_K
                 ser.write(index)        #envoie à la stm32 la nouvelle veleur
                 return jsonify("le nouveau coeff est "+ str(index))
 

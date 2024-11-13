@@ -15,8 +15,8 @@
 #define setTo0 0x62
 #define AntiClockwise 0x01
 #define Clockwise 0x01
-#define Signepositive = 0x00
-#define Signegative = 0x01
+#define Signepositive 0x00
+#define Signegative  0x01
 
 void setK(int32_t k) ;
 int32_t getK(void) ;

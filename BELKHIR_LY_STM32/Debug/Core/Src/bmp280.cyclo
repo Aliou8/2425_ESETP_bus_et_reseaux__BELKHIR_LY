@@ -3,7 +3,7 @@
 ../Core/Src/bmp280.c:48:6:BMP280_Init	3
 ../Core/Src/bmp280.c:61:6:BMP280_ReadID	3
 ../Core/Src/bmp280.c:74:6:BMP280_ReadCalibrationData	3
-../Core/Src/bmp280.c:101:9:BMP280_ReadTemperature	2
-../Core/Src/bmp280.c:109:9:BMP280_ConvertTemperature	1
-../Core/Src/bmp280.c:120:9:BMP280_ReadPressure	2
-../Core/Src/bmp280.c:128:9:BMP280_ConvertPressure	3
+../Core/Src/bmp280.c:102:9:BMP280_ReadTemperature	2
+../Core/Src/bmp280.c:110:9:BMP280_ConvertTemperature	1
+../Core/Src/bmp280.c:121:9:BMP280_ReadPressure	2
+../Core/Src/bmp280.c:129:9:BMP280_ConvertPressure	3

@@ -9,7 +9,7 @@
 #include "bmp280.h"
 #include "can.h"
 
-int32_t coefficientK ;
+int32_t coefficientK=1 ;
 int32_t Angle ;
 
 void setK(int32_t k)
@@ -30,9 +30,9 @@ int32_t getAngle(void)
 static void CAN_SendMessage(CAN_TxHeaderTypeDef pHeader, uint8_t *data , uint32_t pTxMailbox ) {
 
     if (HAL_CAN_AddTxMessage(&hcan1, &pHeader, data, &pTxMailbox) != HAL_OK) {
-        printf("Erreur d'envoi CAN pour l'ID: 0x%lX\r\n", pHeader.StdId);
+        //printf("Erreur d'envoi CAN pour l'ID: 0x%lX\r\n", pHeader.StdId);
     } else {
-        printf("Message CAN envoyé, ID: 0x%lX, Data: 0x%X 0x%X\r\n", pHeader.StdId, data[0], data[1]);
+       // printf("Message CAN envoyé, ID: 0x%lX, Data: 0x%X 0x%X\r\n", pHeader.StdId, data[0], data[1]);
     }
 }
 
@@ -46,7 +46,7 @@ void manualMode( uint8_t rotation , uint8_t steps , uint8_t speed)
     uint32_t pMailbox = 0 ;
     uint8_t data[] = {rotation , steps , speed};
     CAN_SendMessage(pHeader , data ,pMailbox ) ;
-	
+
 }
 
 void setMotorAngle( uint8_t angle , uint8_t sign)
@@ -67,8 +67,8 @@ void setMotorAngle( uint8_t angle , uint8_t sign)
     {
         Angle = -angle ;
     }
-    
-    
+
+
 }
 
 void setPositionTo0(void)
@@ -84,8 +84,10 @@ void setPositionTo0(void)
 }
 
 void moteurRun(void)
+
 {
-	uint8_t angle = (BMP280_ReadTemperature()/coefficientK) ;
+	int Temp0 = 25 ;
+	uint8_t angle = ((Temp0-BMP280_ReadTemperature()/100)*coefficientK) ;
     setMotorAngle( angle , 0) ;
 }
 

@@ -71,7 +71,8 @@ void BMP280_ReadID(void) {
     printf("La valeur id = 0x%X\r\n", idValue);
 }
 
-void BMP280_ReadCalibrationData() {
+void BMP280_ReadCalibrationData()
+{
     uint8_t calibData[BMP280_CALIB_DATA_LEN];
     if (1 == BMP280_RegisterRead(BMP280_REG_CALIB_DATA, calibData, BMP280_CALIB_DATA_LEN)) {
         printf("La lecture de calibration a échoué \r\n");
