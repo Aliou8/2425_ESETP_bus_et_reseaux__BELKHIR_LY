@@ -176,11 +176,6 @@ En cas de requête vers une page inexistante, une erreur 404 est affichée via u
 ### API CRUD 
 Le fichier Python_PI/methodesTP3.py contient les différentes méthodes CRUD pour manipuler les données. Ces fonctions sont organisées selon qu'elles nécessitent un index ou non.
 
-![Texte alternatif](/images/POST.png)
-![Texte alternatif](/images/POSTx.png)
-![Texte alternatif](/images/GET.png)
-![Texte alternatif](/images/GETx.png)
-
 ## TP4-Bus CAN
 La communication sur le bus CAN est gérée dans le fichier ```Moteur_Can```. Ce programme permet d'envoyer des données evia le protocole CAN pour commander un moteur pas a pas 
 
